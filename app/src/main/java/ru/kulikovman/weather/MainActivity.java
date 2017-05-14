@@ -1,11 +1,8 @@
 package ru.kulikovman.weather;
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,9 +29,7 @@ import ru.kulikovman.weather.Model.OpenWeatherMap;
 public class MainActivity extends AppCompatActivity implements LocationListener {
     TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius;
     ImageView imageView;
-    ProgressBar loadindCircle;
-
-    //SharedPreferences sPref = getSharedPreferences("MyPref", MODE_PRIVATE);
+    ProgressBar loadingCircle;
 
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
     LocationManager locationManager;
@@ -46,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Control
         txtCity = (TextView) findViewById(R.id.txtCity);
         txtLastUpdate = (TextView) findViewById(R.id.txtLastUpdate);
         txtDescription = (TextView) findViewById(R.id.txtDescription);
@@ -54,13 +48,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtCelsius = (TextView) findViewById(R.id.txtCelsius);
         imageView = (ImageView) findViewById(R.id.imageView);
-        loadindCircle = (ProgressBar) findViewById(R.id.loadindCircle);
+        loadingCircle = (ProgressBar) findViewById(R.id.loadindCircle);
 
-        //loadData();
-
-        //Get Coordinates
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -79,15 +80,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        //locationManager.removeUpdates(this);
-    }
-
-    @Override
     public void onLocationChanged(Location location) {
         this.location = location;
-
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
@@ -110,31 +104,37 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
-    //кнопка для принудительной отправки запроса с координатами
+    //кнопка обновления погоды
     public void onClick(View view) {
         if (location != null) {
             new GetWeather().execute();
         }
     }
 
-    //формируем запрос с координатами и получаем ответ от сервера
+    //получение погоды с сервера
     private class GetWeather extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadindCircle.setVisibility(View.VISIBLE);
+            loadingCircle.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected String doInBackground(Void... params) {
             String request = Common.apiRequest(String.valueOf(lat), String.valueOf(lng));
             return Helper.getHTTPData(request);
+
         }
 
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
+            if (response == null) {
+                loadingCircle.setVisibility(View.INVISIBLE);
+                return;
+            }
+
             Gson gson = new Gson();
             Type mType = new TypeToken<OpenWeatherMap>() {
             }.getType();
@@ -153,32 +153,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                     .into(imageView);
 
-            loadindCircle.setVisibility(View.INVISIBLE);
+            loadingCircle.setVisibility(View.INVISIBLE);
+
+            Log.d("myLog", "Строка Gson успешно обработана");
         }
-    }
-
-    public void saveData() {
-        //SharedPreferences sPref = getSharedPreferences("MyPref", MODE_PRIVATE);
-        /*SharedPreferences.Editor ed = sPref.edit();
-        ed.putString("txtCity", txtCity.getText().toString());
-        ed.putString("txtLastUpdate", txtLastUpdate.getText().toString());
-        ed.putString("txtDescription", txtDescription.getText().toString());
-        ed.putString("txtHumidity", txtHumidity.getText().toString());
-        ed.putString("txtTime", txtTime.getText().toString());
-        ed.putString("txtCelsius", txtCelsius.getText().toString());
-        ed.apply();*/
-    }
-
-    public void loadData() {
-        //SharedPreferences sPref = getSharedPreferences("MyPref", MODE_PRIVATE);
-        //String savedText = sPref.getString("txtCity", "");
-        /*if (sPref != null) {
-            txtCity.setText(sPref.getString("txtCity", ""));
-            txtLastUpdate.setText(sPref.getString("txtLastUpdate", ""));
-            txtDescription.setText(sPref.getString("txtDescription", ""));
-            txtHumidity.setText(sPref.getString("txtHumidity", ""));
-            txtTime.setText(sPref.getString("txtTime", ""));
-            txtCelsius.setText(sPref.getString("txtCelsius", ""));
-        }*/
     }
 }

@@ -9,11 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Helper {
-    /*private String stream = null;
-
-    public Helper() {
-    }*/
-
     public static String getHTTPData(String urlString) {
         String stream = null;
 
