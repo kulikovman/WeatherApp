@@ -8,11 +8,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Common {
-    public static String API_KEY = "7d1965355e589cda69560e801ea4e1ea";
-    public static String API_LINK = "http://api.openweathermap.org/data/2.5/weather";
 
     @NonNull
     public static String apiRequest(String lat, String lng) {
+        String API_KEY = "7d1965355e589cda69560e801ea4e1ea";
+        String API_LINK = "http://api.openweathermap.org/data/2.5/weather";
+
         StringBuilder sb = new StringBuilder(API_LINK);
         sb.append(String.format("?lat=%s&lon=%s&APPID=%s&units=metric", lat, lng, API_KEY));
         return sb.toString();

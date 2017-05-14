@@ -9,30 +9,29 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class Helper {
-    static String stream = null;
+    /*private String stream = null;
 
     public Helper() {
-    }
+    }*/
 
-    public String getHTTPData(String urlString) {
+    public static String getHTTPData(String urlString) {
+        String stream = null;
+
         try {
             URL url = new URL(urlString);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            if (httpURLConnection.getResponseCode() == 200) // OK - 200
-            {
-                BufferedReader r = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+
+            if (httpURLConnection.getResponseCode() == 200) {
+                // OK - 200
+                BufferedReader br = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
                 StringBuilder sb = new StringBuilder();
                 String line;
-                while ((line = r.readLine()) != null)
+                while ((line = br.readLine()) != null)
                     sb.append(line);
                 stream = sb.toString();
                 httpURLConnection.disconnect();
             }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ignored) {
         }
 
         return stream;

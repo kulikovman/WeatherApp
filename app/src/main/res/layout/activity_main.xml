@@ -6,6 +6,13 @@
     android:orientation="vertical"
     tools:context="ru.kulikovman.weather.MainActivity">
 
+    <ProgressBar
+        android:id="@+id/loadindCircle"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
     <TextView
         android:id="@+id/txtCity"
         android:layout_width="match_parent"
@@ -66,5 +73,13 @@
         android:text=""
         android:textSize="30sp"
         android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:text="Button" />
+
 
 </LinearLayout>
