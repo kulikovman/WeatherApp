@@ -25,20 +25,28 @@ import java.lang.reflect.Type;
 import ru.kulikovman.weather.Common.Common;
 import ru.kulikovman.weather.Helper.Helper;
 import ru.kulikovman.weather.Model.OpenWeatherMap;
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements LocationListener {
+public class MainActivity extends AppCompatActivity {
     TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius;
     ImageView imageView;
     ProgressBar loadingCircle;
 
-    OpenWeatherMap openWeatherMap = new OpenWeatherMap();
+    /*OpenWeatherMap openWeatherMap = new OpenWeatherMap();
     LocationManager locationManager;
     Location location;
-    double lat, lng;
+    double lat, lng;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/BebasNeue_Regular.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );
+
         setContentView(R.layout.activity_main);
 
         txtCity = (TextView) findViewById(R.id.txtCity);
@@ -47,13 +55,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         txtHumidity = (TextView) findViewById(R.id.txtHumidity);
         txtTime = (TextView) findViewById(R.id.txtTime);
         txtCelsius = (TextView) findViewById(R.id.txtCelsius);
-        imageView = (ImageView) findViewById(R.id.imageView);
+
         loadingCircle = (ProgressBar) findViewById(R.id.loadindCircle);
 
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    /*@Override
     protected void onPause() {
         super.onPause();
         locationManager.removeUpdates(this);
@@ -157,5 +170,5 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             Log.d("myLog", "Строка Gson успешно обработана");
         }
-    }
+    }*/
 }

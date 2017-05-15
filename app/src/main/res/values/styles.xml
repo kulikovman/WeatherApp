@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+
+    <!-- Custom font in Styles. -->
+    <style name="TextViewWeatherIconFont">
+        <item name="fontPath">fonts/weathericons.ttf</item>
+    </style>
+
 </resources>
