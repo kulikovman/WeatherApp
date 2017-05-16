@@ -13,9 +13,9 @@ public class OpenWeatherMap {
     private Clouds clouds;
     private Sys sys;
 
+    private String name;
     private int dt;
     private int id;
-    private String name;
     private int cod;
 
     public OpenWeatherMap() {
@@ -31,9 +31,9 @@ public class OpenWeatherMap {
         this.clouds = clouds;
         this.sys = sys;
 
+        this.name = name;
         this.dt = dt;
         this.id = id;
-        this.name = name;
         this.cod = cod;
     }
 
