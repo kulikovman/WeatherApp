@@ -10,35 +10,28 @@
 
 
     <TextView
-        android:id="@+id/sunsetIcon"
-        style="@style/TextViewWeatherIconFont"
+        android:id="@+id/tvTemperature"
+        fontPath="fonts/MyFont.ttf"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="20dp"
-        android:text="@string/wi_sunset"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/txtTime" />
-
-    <ProgressBar
-        android:id="@+id/loadindCircle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="25dp"
-        android:visibility="visible"
+        android:text="26 °C"
+        android:textColor="@color/white"
+        android:textSize="70sp"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingPrefix"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1"
-        tools:layout_constraintTop_creator="1" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp" />
 
     <TextView
-        android:id="@+id/txtCity"
+        android:id="@+id/tvCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -52,12 +45,12 @@
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCelsius"
+        app:layout_constraintTop_toBottomOf="@+id/tvTemperature"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1" />
 
     <TextView
-        android:id="@+id/txtLastUpdate"
+        android:id="@+id/tvLastUpdate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -71,136 +64,141 @@
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCity"
+        app:layout_constraintTop_toBottomOf="@+id/tvCity"
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1" />
 
     <TextView
-        android:id="@+id/txtDescription"
+        android:id="@+id/weatherIcon"
+        style="@style/TextViewWeatherIconFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="6dp"
+        android:text="@string/wi_owm_night_500"
+        android:textColor="@color/white"
+        android:textSize="100sp"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <ProgressBar
+        android:id="@+id/pbLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:visibility="invisible"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="light rain"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/currentWeatherIcon"
+        app:layout_constraintTop_toBottomOf="@+id/weatherIcon"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1" />
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintHorizontal_bias="0.501" />
 
     <TextView
-        android:id="@+id/txtHumidity"
+        android:id="@+id/tvHumidity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="59%"
+        android:text="59"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="40sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1" />
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintHorizontal_bias="0.551" />
 
     <TextView
-        android:id="@+id/txtTime"
+        android:id="@+id/humidityIcon"
+        style="@style/TextViewWeatherIconFont"
+        android:layout_width="30dp"
+        android:layout_height="wrap_content"
+        android:text="@string/wi_humidity"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        android:gravity="center"
+        app:layout_constraintRight_toLeftOf="@+id/tvHumidity"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <TextView
+        android:id="@+id/tvSunSetRise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:gravity="center"
-        android:text="04:49 | 21:02"
+        android:text="04:49  |  21:02"
         android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        android:textSize="25sp"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintBottom_creator="1"
         tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1" />
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="35dp" />
 
     <TextView
-        android:id="@+id/txtCelsius"
-        fontPath="fonts/MyFont.ttf"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:text="26 °C"
-        android:textColor="@color/white"
-        android:textSize="70sp"
-        app:layout_constraintHorizontal_bias="0.52"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loadindCircle"
-        tools:ignore="MissingPrefix"
-        tools:layout_constraintLeft_creator="1"
-        tools:layout_constraintRight_creator="1" />
-
-    <TextView
-        android:id="@+id/currentWeatherIcon"
+        android:id="@+id/sunsetIcon"
         style="@style/TextViewWeatherIconFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="30dp"
-        android:text="@string/wi_owm_night_622"
+        android:layout_marginLeft="20dp"
+        android:text="@string/wi_sunset"
         android:textColor="@color/white"
-        android:textSize="100sp"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLastUpdate" />
+        android:textSize="25sp"
+        app:layout_constraintLeft_toRightOf="@+id/tvSunSetRise"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="32dp" />
 
     <TextView
         android:id="@+id/sunriseIcon"
         style="@style/TextViewWeatherIconFont"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginRight="20dp"
         android:text="@string/wi_sunrise"
         android:textColor="@color/white"
         android:textSize="25sp"
+        app:layout_constraintRight_toLeftOf="@+id/tvSunSetRise"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/txtTime" />
-
-    <TextView
-        android:id="@+id/humidityIcon"
-        style="@style/TextViewWeatherIconFont"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wi_humidity"
-        android:textColor="@color/white"
-        android:textSize="30sp"
-        app:layout_constraintRight_toLeftOf="@+id/txtHumidity"
-        android:layout_marginRight="7dp"
-        app:layout_constraintTop_toTopOf="@+id/txtHumidity"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/txtHumidity"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintVertical_bias="1.0" />
-
+        android:layout_marginBottom="32dp" />
 
 </android.support.constraint.ConstraintLayout>

@@ -1,37 +1,17 @@
 package ru.kulikovman.weather;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
-
-import java.lang.reflect.Type;
-
-import ru.kulikovman.weather.Common.Common;
-import ru.kulikovman.weather.Helper.Helper;
-import ru.kulikovman.weather.Model.OpenWeatherMap;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
-    TextView txtCity, txtLastUpdate, txtDescription, txtHumidity, txtTime, txtCelsius;
-    ImageView imageView;
-    ProgressBar loadingCircle;
+    TextView tvTemperature, tvCity, tvLastUpdate, weatherIcon, tvDescription, tvHumidity, tvSunSetRise;
+    ProgressBar pbLoading;
 
     /*OpenWeatherMap openWeatherMap = new OpenWeatherMap();
     LocationManager locationManager;
@@ -41,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Подключаем библиотеку Calligraphy и устанавливаем шрифт по умолчанию
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/BebasNeue_Regular.ttf")
                 .setFontAttrId(R.attr.fontPath)
@@ -49,14 +31,15 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        txtCity = (TextView) findViewById(R.id.txtCity);
-        txtLastUpdate = (TextView) findViewById(R.id.txtLastUpdate);
-        txtDescription = (TextView) findViewById(R.id.txtDescription);
-        txtHumidity = (TextView) findViewById(R.id.txtHumidity);
-        txtTime = (TextView) findViewById(R.id.txtTime);
-        txtCelsius = (TextView) findViewById(R.id.txtCelsius);
-
-        loadingCircle = (ProgressBar) findViewById(R.id.loadindCircle);
+        // Подключаем необходимые view элементы
+        tvTemperature = (TextView) findViewById(R.id.tvTemperature);
+        tvCity = (TextView) findViewById(R.id.tvCity);
+        tvLastUpdate = (TextView) findViewById(R.id.tvLastUpdate);
+        weatherIcon = (TextView) findViewById(R.id.weatherIcon);
+        tvDescription = (TextView) findViewById(R.id.tvDescription);
+        tvHumidity = (TextView) findViewById(R.id.tvHumidity);
+        tvSunSetRise = (TextView) findViewById(R.id.tvSunSetRise);
+        pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 
         //locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
@@ -130,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            loadingCircle.setVisibility(View.VISIBLE);
+            pbLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -144,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
             if (response == null) {
-                loadingCircle.setVisibility(View.INVISIBLE);
+                pbLoading.setVisibility(View.INVISIBLE);
                 return;
             }
 
@@ -154,19 +137,19 @@ public class MainActivity extends AppCompatActivity {
 
             openWeatherMap = gson.fromJson(response, mType);
 
-            txtCity.setText(String.format("%s, %s", openWeatherMap.getName(), openWeatherMap.getSys().getCountry()));
-            txtLastUpdate.setText(String.format("Last Updated: %s", Common.getDateNow()));
-            txtDescription.setText(String.format("%s", openWeatherMap.getWeather().get(0).getDescription()));
-            txtHumidity.setText(String.format("%d%%", openWeatherMap.getMain().getHumidity()));
-            txtTime.setText(String.format("%s / %s", Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()),
+            tvCity.setText(String.format("%s, %s", openWeatherMap.getName(), openWeatherMap.getSys().getCountry()));
+            tvLastUpdate.setText(String.format("Last Updated: %s", Common.getDateNow()));
+            tvDescription.setText(String.format("%s", openWeatherMap.getWeather().get(0).getDescription()));
+            tvHumidity.setText(String.format("%d%%", openWeatherMap.getMain().getHumidity()));
+            tvSunSetRise.setText(String.format("%s / %s", Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()),
                     Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
-            txtCelsius.setText(String.format("%.1f °C", openWeatherMap.getMain().getTemp()));
+            tvTemperature.setText(String.format("%.1f °C", openWeatherMap.getMain().getTemp()));
 
             Picasso.with(MainActivity.this)
                     .load(Common.getImage(openWeatherMap.getWeather().get(0).getIcon()))
                     .into(imageView);
 
-            loadingCircle.setVisibility(View.INVISIBLE);
+            pbLoading.setVisibility(View.INVISIBLE);
 
             Log.d("myLog", "Строка Gson успешно обработана");
         }
