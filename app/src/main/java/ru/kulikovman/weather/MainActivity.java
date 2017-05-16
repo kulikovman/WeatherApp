@@ -8,6 +8,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 import ru.kulikovman.weather.Common.Common;
 import ru.kulikovman.weather.Helper.Helper;
@@ -36,7 +38,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     LocationManager locationManager;
     Location location;
     double lat, lng, windDeg;
-    String provider;
+    String provider, idWeather;
+    long currentTime, sunsetTime, sunriseTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         locationManager.requestLocationUpdates(provider, 400, 1, this);
 
+        Log.d("myLog", "Запущен GetWeather() из onResume");
         new GetWeather().execute();
     }
 
@@ -128,7 +132,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             Log.d("myLog", "Переменная lng2 = " + lng);
         }
 
-        //new GetWeather().execute();
+        Log.d("myLog", "Запущен GetWeather() из onLocationChanged");
+        new GetWeather().execute();
     }
 
     @Override
@@ -178,7 +183,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }.getType();
 
             openWeatherMap = gson.fromJson(response, mType);
-            pbLoading.setVisibility(View.INVISIBLE);
             Log.d("myLog", "Ответ сервера успешно обработан");
 
             tvCity.setText(String.format("%s", openWeatherMap.getName()));
@@ -204,7 +208,23 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             else windIcon.setText(R.string.wi_direction_up);
 
             // Устанавливаем иконку с изображением погоды
+            idWeather = String.valueOf(openWeatherMap.getWeather().get(0).getId());
+            Log.d("myLog", "idWeather = " + idWeather);
 
+            currentTime = System.currentTimeMillis();
+            sunriseTime = (long) openWeatherMap.getSys().getSunrise() * 1000;
+            sunsetTime = (long) openWeatherMap.getSys().getSunset() * 1000;
+            Log.d("myLog", String.valueOf(currentTime + ": " + sunriseTime + " | " + sunsetTime));
+
+            pbLoading.setVisibility(View.INVISIBLE);
+
+            if (currentTime > sunriseTime && currentTime < sunsetTime) {
+                String nameIcon = "wi_owm_day_" + idWeather;
+                weatherIcon.setText(R.string.wi_owm_day_801);
+            } else {
+                String nameIcon = "wi_owm_night_" + idWeather;
+                weatherIcon.setText(R.string.wi_owm_night_801);
+            }
 
             Log.d("myLog", "Ответ расшифрован и раскидан по полям");
         }
