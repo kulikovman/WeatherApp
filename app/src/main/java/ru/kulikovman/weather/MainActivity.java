@@ -30,8 +30,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
-    TextView tvTemperature, tvCity, tvLastUpdate, weatherIcon, tvDescription,
-            tvHumidity, tvSunSetRise, tvWind, windIcon, tvInternetConnection;
+    TextView tvTemperature, tvCity, tvLastUpdate, tvDescription, tvHumidity, tvSunSetRise, tvWind,
+            tvInternetConnection, weatherIcon, windIcon, humidityIcon, sunsetIcon, sunriseIcon;
     ProgressBar pbLoading;
 
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
@@ -58,14 +58,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         tvTemperature = (TextView) findViewById(R.id.tvTemperature);
         tvCity = (TextView) findViewById(R.id.tvCity);
         tvLastUpdate = (TextView) findViewById(R.id.tvLastUpdate);
-        weatherIcon = (TextView) findViewById(R.id.weatherIcon);
         tvDescription = (TextView) findViewById(R.id.tvDescription);
         tvHumidity = (TextView) findViewById(R.id.tvHumidity);
         tvWind = (TextView) findViewById(R.id.tvWind);
-        windIcon = (TextView) findViewById(R.id.windIcon);
         tvSunSetRise = (TextView) findViewById(R.id.tvSunSetRise);
         tvInternetConnection = (TextView) findViewById(R.id.tvInternetConnection);
+
+        weatherIcon = (TextView) findViewById(R.id.weatherIcon);
+        humidityIcon = (TextView) findViewById(R.id.humidityIcon);
+        windIcon = (TextView) findViewById(R.id.windIcon);
+        sunriseIcon = (TextView) findViewById(R.id.sunriseIcon);
+        sunsetIcon = (TextView) findViewById(R.id.sunsetIcon);
+
         pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
+
 
         // Получаем координаты телефона
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -152,15 +158,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+
     // Получаем погоду с сервера openweathermap.org
     private class GetWeather extends AsyncTask<Void, Void, String> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            weatherIcon.setText(" ");
-            tvInternetConnection.setVisibility(View.INVISIBLE);
+            weatherIcon.setVisibility(View.INVISIBLE);
             pbLoading.setVisibility(View.VISIBLE);
+            tvInternetConnection.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -175,10 +182,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             super.onPostExecute(response);
             if (response == null) {
                 Log.d("myLog", "При отправке запроса произошла ошибка");
+
+                if (tvDescription.getText().toString().equals(" ")) {
+                    tvInternetConnection.setVisibility(View.VISIBLE);
+                } else weatherIcon.setVisibility(View.VISIBLE);
+
                 pbLoading.setVisibility(View.INVISIBLE);
-                tvInternetConnection.setVisibility(View.VISIBLE);
                 return;
             }
+
+            weatherIcon.setVisibility(View.VISIBLE);
 
             Log.d("myLog", "Получили ответ сервера");
             Gson gson = new Gson();
@@ -188,6 +201,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             openWeatherMap = gson.fromJson(response, mType);
             Log.d("myLog", "Ответ сервера успешно обработан");
 
+
+            // Заносим полученные данные в текстовые поля
             tvCity.setText(String.format("%s", openWeatherMap.getName()));
             tvLastUpdate.setText(String.format("%s", Common.getDateNow()));
             tvDescription.setText(String.format("%s", openWeatherMap.getWeather().get(0).getDescription()));
@@ -197,18 +212,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()),
                     Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
             tvTemperature.setText(String.format("%.0f °C", openWeatherMap.getMain().getTemp()));
+            Log.d("myLog", "Значения полям назначены");
 
             // Устанавливаем иконку с направлением ветра
             windDeg = openWeatherMap.getWind().getDeg();
             if (windDeg >= 0 && windDeg <= 23) windIcon.setText(R.string.wi_direction_up);
-            else if (windDeg >= 24 && windDeg <= 68) windIcon.setText(R.string.wi_direction_up_right);
+            else if (windDeg >= 24 && windDeg <= 68)
+                windIcon.setText(R.string.wi_direction_up_right);
             else if (windDeg >= 69 && windDeg <= 113) windIcon.setText(R.string.wi_direction_right);
-            else if (windDeg >= 114 && windDeg <= 158) windIcon.setText(R.string.wi_direction_down_right);
+            else if (windDeg >= 114 && windDeg <= 158)
+                windIcon.setText(R.string.wi_direction_down_right);
             else if (windDeg >= 159 && windDeg <= 203) windIcon.setText(R.string.wi_direction_down);
-            else if (windDeg >= 204 && windDeg <= 248) windIcon.setText(R.string.wi_direction_down_left);
+            else if (windDeg >= 204 && windDeg <= 248)
+                windIcon.setText(R.string.wi_direction_down_left);
             else if (windDeg >= 249 && windDeg <= 293) windIcon.setText(R.string.wi_direction_left);
-            else if (windDeg >= 294 && windDeg <= 338) windIcon.setText(R.string.wi_direction_up_left);
+            else if (windDeg >= 294 && windDeg <= 338)
+                windIcon.setText(R.string.wi_direction_up_left);
             else windIcon.setText(R.string.wi_direction_up);
+            Log.d("myLog", "Иконка направления ветра установлена");
 
             // Устанавливаем иконку с изображением погоды
             currentTime = System.currentTimeMillis();
@@ -227,6 +248,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 int nameIcon = getResources().getIdentifier("wi_owm_night_" + idWeather, "string", getPackageName());
                 weatherIcon.setText(nameIcon);
             }
+            Log.d("myLog", "Иконка погоды установлена");
+
+            // Устанавливаем значки для оставшихся иконок
+            humidityIcon.setText(R.string.wi_humidity);
+            sunriseIcon.setText(R.string.wi_sunrise);
+            sunsetIcon.setText(R.string.wi_sunset);
+            Log.d("myLog", "Оставшиеся иконки установлены");
 
             Log.d("myLog", "Ответ расшифрован и раскидан по полям");
         }

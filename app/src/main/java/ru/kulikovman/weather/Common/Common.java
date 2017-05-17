@@ -27,18 +27,6 @@ public class Common {
         return dateFormat.format(date);
     }
 
-    public static Date convertedTime(double unixTimeStamp) {
-        Date date = new Date();
-        date.setTime((long) unixTimeStamp * 1000);
-        return date;
-    }
-
-    public static Date getTimeNow() {
-        Date date = new Date();
-        date.setTime(System.currentTimeMillis());
-        return date;
-    }
-
     public static String getDateNow() {
         DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale.US);
         Date date = new Date();
