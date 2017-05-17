@@ -208,22 +208,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             else windIcon.setText(R.string.wi_direction_up);
 
             // Устанавливаем иконку с изображением погоды
-            idWeather = String.valueOf(openWeatherMap.getWeather().get(0).getId());
-            Log.d("myLog", "idWeather = " + idWeather);
-
             currentTime = System.currentTimeMillis();
             sunriseTime = (long) openWeatherMap.getSys().getSunrise() * 1000;
             sunsetTime = (long) openWeatherMap.getSys().getSunset() * 1000;
             Log.d("myLog", String.valueOf(currentTime + ": " + sunriseTime + " | " + sunsetTime));
 
+            idWeather = String.valueOf(openWeatherMap.getWeather().get(0).getId());
+            Log.d("myLog", "idWeather = " + idWeather);
             pbLoading.setVisibility(View.INVISIBLE);
 
             if (currentTime > sunriseTime && currentTime < sunsetTime) {
-                String nameIcon = "wi_owm_day_" + idWeather;
-                weatherIcon.setText(R.string.wi_owm_day_801);
+                int nameIcon = getResources().getIdentifier("wi_owm_day_" + idWeather, "string", getPackageName());
+                weatherIcon.setText(nameIcon);
             } else {
-                String nameIcon = "wi_owm_night_" + idWeather;
-                weatherIcon.setText(R.string.wi_owm_night_801);
+                int nameIcon = getResources().getIdentifier("wi_owm_night_" + idWeather, "string", getPackageName());
+                weatherIcon.setText(nameIcon);
             }
 
             Log.d("myLog", "Ответ расшифрован и раскидан по полям");
