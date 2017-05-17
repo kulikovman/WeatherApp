@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         setContentView(R.layout.activity_main);
 
+
         // Подключаем необходимые view элементы
         tvTemperature = (TextView) findViewById(R.id.tvTemperature);
         tvCity = (TextView) findViewById(R.id.tvCity);
@@ -92,9 +93,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         if (location != null) {
             lat = location.getLatitude();
-            Log.d("myLog", "Переменная lat1 = " + lat);
             lng = location.getLongitude();
-            Log.d("myLog", "Переменная lng1 = " + lng);
+            Log.d("myLog", "Переменные lat1 | lng1 = " + lat + " | " + lng);
         }
     }
 
@@ -134,9 +134,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Log.d("myLog", "Вызван метод onLocationChanged");
         if (location != null) {
             lat = location.getLatitude();
-            Log.d("myLog", "Переменная lat2 = " + lat);
             lng = location.getLongitude();
-            Log.d("myLog", "Переменная lng2 = " + lng);
+            Log.d("myLog", "Переменные lat2 | lng2 = " + lat + " | " + lng);
         }
 
         Log.d("myLog", "Запущен GetWeather() из onLocationChanged");
@@ -180,6 +179,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         @Override
         protected void onPostExecute(String response) {
             super.onPostExecute(response);
+
+
+            // Если нет интернета, то выводим сообщение
             if (response == null) {
                 Log.d("myLog", "При отправке запроса произошла ошибка");
 
@@ -191,15 +193,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 return;
             }
 
-            weatherIcon.setVisibility(View.VISIBLE);
 
-            Log.d("myLog", "Получили ответ сервера");
+            // Обрабатываем ответ сервера
             Gson gson = new Gson();
             Type mType = new TypeToken<OpenWeatherMap>() {
             }.getType();
 
             openWeatherMap = gson.fromJson(response, mType);
             Log.d("myLog", "Ответ сервера успешно обработан");
+
+
+            // Делаем иконку погоды видимой
+            weatherIcon.setVisibility(View.VISIBLE);
 
 
             // Заносим полученные данные в текстовые поля
@@ -212,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunrise()),
                     Common.unixTimeStampToDateTime(openWeatherMap.getSys().getSunset())));
             tvTemperature.setText(String.format("%.0f °C", openWeatherMap.getMain().getTemp()));
-            Log.d("myLog", "Значения полям назначены");
+
 
             // Устанавливаем иконку с направлением ветра
             windDeg = openWeatherMap.getWind().getDeg();
@@ -229,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             else if (windDeg >= 294 && windDeg <= 338)
                 windIcon.setText(R.string.wi_direction_up_left);
             else windIcon.setText(R.string.wi_direction_up);
-            Log.d("myLog", "Иконка направления ветра установлена");
+
 
             // Устанавливаем иконку с изображением погоды
             currentTime = System.currentTimeMillis();
@@ -248,13 +253,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 int nameIcon = getResources().getIdentifier("wi_owm_night_" + idWeather, "string", getPackageName());
                 weatherIcon.setText(nameIcon);
             }
-            Log.d("myLog", "Иконка погоды установлена");
+
 
             // Устанавливаем значки для оставшихся иконок
             humidityIcon.setText(R.string.wi_humidity);
             sunriseIcon.setText(R.string.wi_sunrise);
             sunsetIcon.setText(R.string.wi_sunset);
-            Log.d("myLog", "Оставшиеся иконки установлены");
+
 
             Log.d("myLog", "Ответ расшифрован и раскидан по полям");
         }
