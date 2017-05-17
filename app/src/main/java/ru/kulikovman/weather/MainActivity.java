@@ -31,7 +31,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
     TextView tvTemperature, tvCity, tvLastUpdate, weatherIcon, tvDescription,
-            tvHumidity, tvSunSetRise, tvWind, windIcon;
+            tvHumidity, tvSunSetRise, tvWind, windIcon, tvInternetConnection;
     ProgressBar pbLoading;
 
     OpenWeatherMap openWeatherMap = new OpenWeatherMap();
@@ -64,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         tvWind = (TextView) findViewById(R.id.tvWind);
         windIcon = (TextView) findViewById(R.id.windIcon);
         tvSunSetRise = (TextView) findViewById(R.id.tvSunSetRise);
+        tvInternetConnection = (TextView) findViewById(R.id.tvInternetConnection);
         pbLoading = (ProgressBar) findViewById(R.id.pbLoading);
 
         // Получаем координаты телефона
@@ -158,6 +159,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         protected void onPreExecute() {
             super.onPreExecute();
             weatherIcon.setText(" ");
+            tvInternetConnection.setVisibility(View.INVISIBLE);
             pbLoading.setVisibility(View.VISIBLE);
         }
 
@@ -174,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             if (response == null) {
                 Log.d("myLog", "При отправке запроса произошла ошибка");
                 pbLoading.setVisibility(View.INVISIBLE);
+                tvInternetConnection.setVisibility(View.VISIBLE);
                 return;
             }
 
