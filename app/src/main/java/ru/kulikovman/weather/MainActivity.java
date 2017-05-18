@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             }, 0);
         }
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
+        locationManager.requestLocationUpdates(provider, 400, 500, this);
 
         Log.d("myLog", "Запущен GetWeather() из onResume");
         new GetWeather().execute();
