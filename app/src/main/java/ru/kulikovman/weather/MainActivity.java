@@ -125,13 +125,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
         locationManager.requestLocationUpdates(provider, 400, 500, this);
 
+        // Координаты для тестирования приложения
+        // Нужно комментить содержимое onLocationChanged()
+        //lat = 55.045;
+        //lng = 60.1083;
+
         Log.d("myLog", "Запущен GetWeather() из onResume");
         new GetWeather().execute();
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        Log.d("myLog", "Вызван метод onLocationChanged");
         if (location != null) {
             lat = location.getLatitude();
             lng = location.getLongitude();
@@ -240,10 +244,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             currentTime = System.currentTimeMillis();
             sunriseTime = (long) openWeatherMap.getSys().getSunrise() * 1000;
             sunsetTime = (long) openWeatherMap.getSys().getSunset() * 1000;
-            Log.d("myLog", String.valueOf(currentTime + ": " + sunriseTime + " | " + sunsetTime));
 
             idWeather = String.valueOf(openWeatherMap.getWeather().get(0).getId());
-            Log.d("myLog", "idWeather = " + idWeather);
             pbLoading.setVisibility(View.INVISIBLE);
 
             if (currentTime > sunriseTime && currentTime < sunsetTime) {
