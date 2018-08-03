@@ -1,10 +1,10 @@
 # WeatherApp
-The application for task management, the main purpose of which is to make task management as simple and convenient as possible.
+Simple weather application. Determines the location of the user and shows the current weather for these coordinates. Works completely in automatic mode, to get the weather you just need to launch the application.
 
 ## Application Functionality:
-* Quickly add tasks.
-* Quickly change the parameters of the task, without having to open it.
-* Sorting tasks by type and groups.
+* Specifies the current location.
+* Shows the weather conditions, temperature, humidity, wind speed and direction, time of sunrise and sunset.
+* A total of 61 weather conditions can be displayed.
 
 ## Used libraries:
 Picasso
